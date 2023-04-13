@@ -6,9 +6,16 @@ import { MembersService } from 'src/members/members.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RoleConnectionService } from 'src/role-connection/role-connection.service';
 import { emailTemplate } from './template';
+import nodemailer from 'nodemailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { Transporter } from 'nodemailer';
 
 @Injectable()
-export class EmailService extends MailService {
+export class EmailService {
+  private readonly mailer:
+    | Transporter<SMTPTransport.SentMessageInfo>
+    | undefined;
+
   constructor(
     private readonly db: PrismaService,
     private readonly kv: KeyvService,
@@ -16,8 +23,17 @@ export class EmailService extends MailService {
     private readonly roleConnectionService: RoleConnectionService,
     private readonly memberService: MembersService,
   ) {
-    super();
-    this.setApiKey(configService.getOrThrow('SENDGRID_KEY'));
+    this.mailer = nodemailer.createTransport(
+      new SMTPTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: this.configService.getOrThrow('GMAIL_USER'),
+          pass: this.configService.getOrThrow('GMAIL_PASS'),
+        },
+      }),
+    );
   }
 
   async verifyEmail(email: string, id: string) {
@@ -25,16 +41,16 @@ export class EmailService extends MailService {
     await this.kv.set(token, { email, userId: id });
 
     const host = this.configService.getOrThrow('HOST');
-    const sendFrom = this.configService.getOrThrow('SEND_FROM');
+    const sendFrom = this.configService.getOrThrow('GMAIL_USER');
 
-    await this.send({
+    const tokenUrl = `${host}/api/email/callback?token=${token}`;
+
+    if (!this.mailer) throw new Error('Mailer not initialized');
+    await this.mailer.sendMail({
       to: email,
       from: sendFrom,
       subject: 'Hey from ProgSoc! Verify your email for our Discord server!',
-      templateId: 'd-778479d7b210435cbec21640f4429a26',
-      dynamicTemplateData: {
-        Weblink: `${host}/api/email/callback?token=${token}`,
-      },
+      html: emailTemplate(tokenUrl),
     });
   }
 

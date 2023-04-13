@@ -117,7 +117,7 @@ export const emailTemplate = (tokenUrl: string) => `
   </style>
     <style>
       @media screen and (max-width:480px) {
-        table\0 {
+        table\\0 {
           width: 480px !important;
           }
       }
