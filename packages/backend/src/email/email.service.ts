@@ -57,6 +57,7 @@ export class EmailService {
 
     await this.roleConnectionService.pushMetadata(id, {
       member: isEmailMember ? 1 : 0,
+      expiry: isEmailMember?.end_date ?? 0,
     });
     await this.kv.delete(token);
     return true;

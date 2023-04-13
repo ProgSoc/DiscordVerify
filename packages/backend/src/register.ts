@@ -11,6 +11,12 @@ const bootstrap = async () => {
       name: 'Member',
       description: 'Member of ProgSoc',
     },
+    {
+      key: 'expiry',
+      type: 5,
+      name: 'Expiry',
+      description: 'Expiry of membership',
+    },
   ];
 
   const response = await fetch(url, {
