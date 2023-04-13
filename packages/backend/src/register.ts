@@ -17,6 +17,12 @@ const bootstrap = async () => {
       name: 'Expiry',
       description: 'Expiry of membership',
     },
+    {
+      key: 'joined',
+      type: 6,
+      name: 'Joined',
+      description: 'Joined date',
+    },
   ];
 
   const response = await fetch(url, {
