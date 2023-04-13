@@ -5,6 +5,7 @@ import { KeyvService } from 'src/keyv/keyv.service';
 import { MembersService } from 'src/members/members.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RoleConnectionService } from 'src/role-connection/role-connection.service';
+import { emailTemplate } from './template';
 
 @Injectable()
 export class EmailService extends MailService {
@@ -29,9 +30,9 @@ export class EmailService extends MailService {
     await this.send({
       to: email,
       from: sendFrom,
-      subject: 'Verify your email',
+      subject: 'Hey from ProgSoc! Verify your email for our Discord server!',
       text: `Please verify your email by clicking this link: ${host}/api/email/callback?token=${token}`,
-      html: `<p>Please verify your email by clicking this link: <a href="${host}/api/email/callback?token=${token}">Verify</a></p>`,
+      html: emailTemplate(`${host}/api/email/callback?token=${token}`),
     });
   }
 
