@@ -7,14 +7,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { RoleConnectionService } from 'src/role-connection/role-connection.service';
 import { emailTemplate } from './template';
 import nodemailer from 'nodemailer';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { Transporter } from 'nodemailer';
 
 @Injectable()
 export class EmailService {
-  private readonly mailer:
-    | Transporter<SMTPTransport.SentMessageInfo>
-    | undefined;
+  private readonly mailer: Transporter | undefined;
 
   constructor(
     private readonly db: PrismaService,
@@ -23,17 +20,15 @@ export class EmailService {
     private readonly roleConnectionService: RoleConnectionService,
     private readonly memberService: MembersService,
   ) {
-    this.mailer = nodemailer.createTransport(
-      new SMTPTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-          user: this.configService.getOrThrow('GMAIL_USER'),
-          pass: this.configService.getOrThrow('GMAIL_PASS'),
-        },
-      }),
-    );
+    this.mailer = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: this.configService.getOrThrow('GMAIL_USER'),
+        pass: this.configService.getOrThrow('GMAIL_PASS'),
+      },
+    });
   }
 
   async verifyEmail(email: string, id: string) {
