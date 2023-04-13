@@ -42,15 +42,12 @@ export class EmailService extends MailService {
     const email = await this.kv.get(token);
     if (!email) return false;
     if (email.userId !== id) return false;
-    await this.db.user.update({
-      where: { id },
-      data: { email: email.email },
-    });
     const isEmailMember = await this.memberService.isMember(email.email);
 
     await this.roleConnectionService.pushMetadata(id, {
       member: isEmailMember ? 1 : 0,
     });
+    await this.kv.delete(token);
     return true;
   }
 
