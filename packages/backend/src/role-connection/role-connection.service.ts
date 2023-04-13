@@ -11,7 +11,7 @@ export class RoleConnectionService {
 
   async pushMetadata(
     userId: string,
-    metadata: Record<string, string | number>,
+    metadata: Record<string, string | number | undefined>,
   ) {
     const connectionUrl = `https://discord.com/api/v10/users/@me/applications/${this.config.getOrThrow(
       'DISCORD_CLIENT_ID',

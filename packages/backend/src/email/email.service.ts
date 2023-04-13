@@ -55,9 +55,13 @@ export class EmailService {
     if (email.userId !== id) return false;
     const isEmailMember = await this.memberService.isMember(email.email);
 
+    const currentDateMinusOneDay = new Date();
+    currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate() - 1);
+    const ISO8601String = currentDateMinusOneDay.toISOString();
+
     await this.roleConnectionService.pushMetadata(id, {
       member: isEmailMember ? 1 : 0,
-      expiry: isEmailMember?.end_date ?? 0,
+      expiry: isEmailMember?.end_date ?? ISO8601String,
     });
     await this.kv.delete(token);
     return true;
