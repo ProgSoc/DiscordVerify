@@ -51,8 +51,12 @@ export class EmailService {
 
   async verifyEmailCallback(token: string, id: string) {
     const email = await this.kv.get(token);
-    if (!email) return false;
-    if (email.userId !== id) return false;
+    if (!email) {
+      throw new Error('Invalid token');
+    }
+    if (email.userId !== id) {
+      throw new Error('User ID does not match');
+    }
     const isEmailMember = await this.memberService.isMember(email.email);
 
     const currentDateMinusOneDay = new Date();
@@ -64,7 +68,6 @@ export class EmailService {
       expiry: isEmailMember?.end_date ?? ISO8601String,
     });
     await this.kv.delete(token);
-    return true;
   }
 
   private generateToken() {

@@ -24,9 +24,7 @@ export class EmailController {
   ) {
     if (!token || !id) throw new BadRequestException('Token is required');
 
-    const res = await this.emailService.verifyEmailCallback(token, id);
-
-    if (!res) throw new BadRequestException('Invalid token');
+    await this.emailService.verifyEmailCallback(token, id);
 
     return { url: '/success' };
   }
