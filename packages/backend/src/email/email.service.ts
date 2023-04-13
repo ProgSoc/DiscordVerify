@@ -31,8 +31,10 @@ export class EmailService extends MailService {
       to: email,
       from: sendFrom,
       subject: 'Hey from ProgSoc! Verify your email for our Discord server!',
-      text: `Please verify your email by clicking this link: ${host}/api/email/callback?token=${token}`,
-      html: emailTemplate(`${host}/api/email/callback?token=${token}`),
+      templateId: 'd-778479d7b210435cbec21640f4429a26',
+      dynamicTemplateData: {
+        Weblink: `${host}/api/email/callback?token=${token}`,
+      },
     });
   }
 
