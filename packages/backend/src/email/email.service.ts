@@ -59,14 +59,9 @@ export class EmailService {
     currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate() - 1);
     const ISO8601String = currentDateMinusOneDay.toISOString();
 
-    const currentDatePlusOneDay = new Date();
-    currentDatePlusOneDay.setDate(currentDatePlusOneDay.getDate() + 1);
-    const ISO8601StringPlusOneDay = currentDatePlusOneDay.toISOString();
-
     await this.roleConnectionService.pushMetadata(id, {
       member: isEmailMember ? 1 : 0,
       expiry: isEmailMember?.end_date ?? ISO8601String,
-      joined: isEmailMember?.joined_date ?? ISO8601StringPlusOneDay,
     });
     await this.kv.delete(token);
     return true;
