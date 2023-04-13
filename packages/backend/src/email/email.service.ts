@@ -28,7 +28,7 @@ export class EmailService extends MailService {
 
     await this.send({
       to: email,
-      from: 'test@pietschner.com',
+      from: sendFrom,
       subject: 'Verify your email',
       text: `Please verify your email by clicking this link: ${host}/api/email/callback?token=${token}`,
       html: `<p>Please verify your email by clicking this link: <a href="${host}/api/email/callback?token=${token}">Verify</a></p>`,
