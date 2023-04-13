@@ -7,10 +7,12 @@ import {
   Post,
   Body,
   Redirect,
+  UseGuards,
 } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { GetUser } from 'src/auth/decorators/GetUserDecorator.decorator';
 import { EmailDto } from './dto/EmailDto.dto';
+import { SessionGuard } from 'src/auth/guard/session.guard';
 
 @Controller('email')
 export class EmailController {
@@ -29,6 +31,7 @@ export class EmailController {
     return { url: '/success' };
   }
 
+  @UseGuards(SessionGuard)
   @Post('verify')
   async onEmailVerifyRequest(
     @Body() { email }: EmailDto,
