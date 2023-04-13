@@ -1,0 +1,18 @@
+{
+  "name": "progsoc-verification",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sebasptsch/progsoc-verification.git",
+  "author": "Sebastian Pietschner <32213671+sebasptsch@users.noreply.github.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build:backend": "yarn workspace backend build",
+    "dev:backend": "yarn workspace backend dev",
+    "dev:frontend": "yarn workspace frontend dev",
+    "build:frontend": "yarn workspace frontend build"
+  }
+}
